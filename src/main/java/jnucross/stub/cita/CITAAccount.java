@@ -1,44 +1,52 @@
-package jnucross.stub.ethereum.account;
+package jnucross.stub.cita;
 
+import com.citahub.cita.crypto.ECKeyPair;
+import com.citahub.cita.crypto.Keys;
+import com.citahub.cita.protocol.CITAj;
+import com.citahub.cita.tx.RawTransactionManager;
+import com.citahub.cita.utils.Numeric;
 import com.webank.wecross.stub.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.web3j.crypto.ECKeyPair;
-import org.web3j.crypto.Keys;
-import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
-import java.security.KeyPair;
 import java.util.Map;
 
-public class EthereumAccount implements Account {
-    // Ethereum version geth v1.10.16
+public class CITAAccount implements Account {
+    private static final Logger logger = LoggerFactory.getLogger(CITAAccount.class);
 
+    private static final String ABI_ADDRESS = "ffffffffffffffffffffffffffffffffff010001";
+    private RawTransactionManager transactionManager;
+    private CITAj service;
+    private String abi;
     private String name;
     private String type;
+    private String identity;
+    private int keyID;
     private BigInteger publicKey;
     private ECKeyPair ecKeyPair;
 
-    private int keyID;
-
-    private boolean isDefault;
-
-    private static final Logger logger = LoggerFactory.getLogger(EthereumAccount.class);
-
-    public EthereumAccount(String name, String type, ECKeyPair ecKeyPair) {
+    public CITAAccount(String name, String type, ECKeyPair ecKeyPair) {
         this.name = name;
         this.type = type;
         this.publicKey = ecKeyPair.getPublicKey();
         this.ecKeyPair = ecKeyPair;
+        this.identity = Keys.getAddress(publicKey);
     }
 
-    public EthereumAccount(Map<String, Object> properties) {
+    public CITAAccount(Map<String, Object> properties) {
         String name = (String) properties.get("name");
+        String address = (String) properties.get("address");
         String pubKeyStr = (String) properties.get("publicKey");
         String priKeyStr = (String) properties.get("privateKey");
         String type = (String) properties.get("type");
         if (name == null || name.length() == 0) {
             logger.error("name has not given");
+            return;
+        }
+
+        if (address == null || address.length() == 0) {
+            logger.error("address has not given");
             return;
         }
 
@@ -63,6 +71,7 @@ public class EthereumAccount implements Account {
             logger.info("New account: {} type:{}", name, type);
             ECKeyPair ecKeyPair = new ECKeyPair(privateKey, publicKey);
 
+            this.identity = address;
             this.name = name;
             this.type = type;
             this.publicKey = publicKey;
@@ -75,38 +84,30 @@ public class EthereumAccount implements Account {
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @Override
     public String getType() {
-        return type;
+        return this.type;
     }
 
     @Override
     public String getIdentity() {
-        return Keys.getAddress(ecKeyPair);
+        return this.identity;
     }
 
     @Override
     public int getKeyID() {
-        return keyID;
+        return this.keyID;
     }
 
     @Override
     public boolean isDefault() {
-        return isDefault;
-    }
-
-    public void setKeyID(int keyID) {
-        this.keyID = keyID;
+        return false;
     }
 
     public ECKeyPair getEcKeyPair() {
         return ecKeyPair;
-    }
-
-    public BigInteger getPublicKey() {
-        return publicKey;
     }
 }
