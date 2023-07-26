@@ -22,6 +22,7 @@ import link.luyu.toolkit.abi.ContractABI;
 import link.luyu.toolkit.abi.FunctionABI;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
+import org.bouncycastle.util.encoders.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +30,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidParameterException;
 import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class CITADriver implements Driver {
@@ -48,6 +51,9 @@ public class CITADriver implements Driver {
 
     @Override
     public ImmutablePair<Boolean, TransactionRequest> decodeTransactionRequest(Request request) {
+
+        int requestType = request.getType();
+        logger.error("Trace - decodeTransactionRequest called!");
         return null;
     }
 
