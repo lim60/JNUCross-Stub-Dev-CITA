@@ -120,7 +120,7 @@ public class CITAStubFactory implements StubFactory {
                             + "\n"
                             + "[channelService]\n"
                             + "    wallFile = 'xxx.json'\n"
-                            + "    connectionsStr = ['127.0.0.1:20200']\n"
+                            + "    connectionsStr = ['http://10.154.24.5:1337']\n"
                             + "\n";
             String confFilePath = path + "/stub.toml";
             File confFile = new File(confFilePath);

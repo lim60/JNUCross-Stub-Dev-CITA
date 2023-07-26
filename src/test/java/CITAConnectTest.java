@@ -3,6 +3,7 @@ import com.citahub.cita.protocol.core.DefaultBlockParameter;
 import com.citahub.cita.protocol.core.methods.response.AppBlock;
 import com.citahub.cita.protocol.core.methods.response.AppBlockNumber;
 import com.citahub.cita.protocol.core.methods.response.AppGetBalance;
+import com.citahub.cita.protocol.core.methods.response.AppTransaction;
 import com.citahub.cita.protocol.http.HttpService;
 import jnucross.stub.cita.CITAConnection;
 import org.junit.Test;
@@ -30,8 +31,8 @@ public class CITAConnectTest {
         //AppBlock appBlock = service.appGetBlockByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(1)), true).send();
         //System.out.println(appBlock.getResult().getHash());
 
-        AppBlock appBlock2 = service.appGetBlockByHash("0x0acd3bc4968597056a3c624066e7901b0887d14a4d5e625979ea89a6d67df968", true).send();
-        System.out.println(appBlock2.getResult().getHash());
+        AppTransaction appTransaction = service.appGetTransactionByHash("0x82dcf660f7d82ad50792f39381c9667cb6667335f99d87ce42f04471ee03e2f2").send();
+        System.out.println(appTransaction.getTransaction().getBlockNumber());
 
     }
 }

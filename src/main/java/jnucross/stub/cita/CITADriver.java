@@ -6,8 +6,6 @@ import com.citahub.cita.crypto.ECKeyPair;
 import com.citahub.cita.crypto.Hash;
 import com.citahub.cita.crypto.Keys;
 import com.citahub.cita.crypto.Sign;
-import com.citahub.cita.crypto.sm2.SM2;
-import com.citahub.cita.crypto.sm2.SM2Keys;
 import com.citahub.cita.protocol.core.methods.response.TransactionReceipt;
 import com.citahub.cita.utils.HexUtil;
 import com.citahub.cita.utils.Numeric;
@@ -22,6 +20,7 @@ import link.luyu.toolkit.abi.ContractABI;
 import link.luyu.toolkit.abi.FunctionABI;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
+import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.util.encoders.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +88,7 @@ public class CITADriver implements Driver {
                 byte[] pubKey = Numeric.toBytesPadded(pk, 64);
                 byte[] secKey = Numeric.toBytesPadded(sk, 32);
 
-                String sender = SM2Keys.getAddress(Numeric.toHexStringWithPrefixZeroPadded(new BigInteger(1, pubKey), 128));
+                String sender = Keys.getAddress(Numeric.toHexStringWithPrefixZeroPadded(new BigInteger(1, pubKey), 128));
                 call.setSender("0x" + sender);
                 try {
                     byte[] data = objectMapper.writeValueAsBytes(call);
@@ -165,23 +164,8 @@ public class CITADriver implements Driver {
 
                         try {
                             byte[] bsTx = tx.serializeRawTransaction(false);
-                            BigInteger pk = ((CITAAccount)context.getAccount()).getEcKeyPair().getPublicKey();
-                            BigInteger sk = ((CITAAccount)context.getAccount()).getEcKeyPair().getPrivateKey();
-                            byte[] pubKey = Numeric.toBytesPadded(pk, 64);
-                            byte[] secKey = Numeric.toBytesPadded(sk, 32);
-                            byte[] prepareMessage = SM2WithSM3.prepareMessage(pubKey, bsTx);
-                            byte[] message = HashUtil.sm3(prepareMessage);
-
-                            BigInteger secKeyAsBI = new BigInteger(1, secKey);
-                            SM2Signer signer = new SM2Signer();
-                            ECPrivateKeyParameters privateKeyParameters =
-                                    new ECPrivateKeyParameters(secKeyAsBI, SM2WithSM3.CURVE);
-                            signer.init(true, privateKeyParameters);
-
-                            SignatureData signatureData = signer.generateSignatureData(message);
-                            SM2.Signature signature = new SM2.Signature(signatureData.getR(), signatureData.getS());
-                            byte[] sig = join(HexUtil.hexToBytes(signature.getSign()), pubKey);
-                            String raw_tx = tx.serializeUnverifiedTransaction(sig, bsTx);
+                            Sign.SignatureData signatureData = Sign.signMessage(bsTx, ((CITAAccount)context.getAccount()).getEcKeyPair());
+                            String raw_tx = tx.serializeUnverifiedTransaction(signatureData.get_signature(), bsTx);
 
                             connection.asyncSend(newRequest(
                                             name,
