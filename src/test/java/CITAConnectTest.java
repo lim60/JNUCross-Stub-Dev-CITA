@@ -26,13 +26,14 @@ public class CITAConnectTest {
         CITAj service = CITAj.build(new HttpService("http://10.154.24.5:1337"));
         AppBlockNumber result = service.appBlockNumber().send();
         BigInteger blockNumber = result.getBlockNumber();
-        System.out.println(blockNumber);
+        System.out.println("cita blockNumber = " + blockNumber);
 
-        //AppBlock appBlock = service.appGetBlockByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(1)), true).send();
-        //System.out.println(appBlock.getResult().getHash());
+        AppTransaction appTransaction = service.appGetTransactionByHash("0xb8659e978eef009a286c8d2fc663327d7c699048230ba7abd1f50f6b4d34e9b9").send();
 
-        AppTransaction appTransaction = service.appGetTransactionByHash("0x82dcf660f7d82ad50792f39381c9667cb6667335f99d87ce42f04471ee03e2f2").send();
-        System.out.println(appTransaction.getTransaction().getBlockNumber());
+        AppBlock appBlock = service.appGetBlockByNumber(DefaultBlockParameter.valueOf(appTransaction.getTransaction().getBlockNumber()), true).send();
+        System.out.println(appBlock.getBlock().getBody().getTransactions());
+
+        System.out.println(appTransaction.getTransaction().getFrom());
 
     }
 }

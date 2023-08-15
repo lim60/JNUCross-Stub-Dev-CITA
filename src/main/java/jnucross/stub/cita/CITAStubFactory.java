@@ -119,7 +119,7 @@ public class CITAStubFactory implements StubFactory {
                             + "    type = 'CITA"
                             + "\n"
                             + "[channelService]\n"
-                            + "    wallFile = 'xxx.json'\n"
+                            + "    walletFile = 'xxx.json'\n"
                             + "    connectionsStr = ['http://10.154.24.5:1337']\n"
                             + "\n";
             String confFilePath = path + "/stub.toml";

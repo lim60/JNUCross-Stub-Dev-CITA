@@ -50,7 +50,6 @@ public class CITADriver implements Driver {
 
     @Override
     public ImmutablePair<Boolean, TransactionRequest> decodeTransactionRequest(Request request) {
-
         int requestType = request.getType();
         logger.error("Trace - decodeTransactionRequest called!");
         return null;

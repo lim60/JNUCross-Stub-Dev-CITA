@@ -43,46 +43,48 @@ public class TransferTest {
         Credentials credentials = Credentials.create("0xbc24c93fe64c3228515322fbf235b97615688240483cce89fc5bf347ab8aab32");
         Credentials credentials1 = WalletUtils.loadCredentials("123456", "./src/test/resources/UTC--2023-08-08T10-36-33.190000000Z--da8b813b49161d9a25d91bdcc4397887cc70325e.json");
         //System.out.println(credentials1.getAddress());
-        System.out.println("from:" + credentials.getAddress());
+        System.out.println("address = " + credentials.getAddress());
+        System.out.println("privateKey = " + credentials.getEcKeyPair().getPrivateKey());
+        System.out.println("publicKey = " + credentials.getEcKeyPair().getPublicKey());
         CITAQueryBalance(credentials.getAddress());
         String to = credentials1.getAddress();
         System.out.println("to :" + to);
         CITAQueryBalance(to);
 
-        Long blockNumber = Numeric.toBigInt(service.appGetBlockByNumber(DefaultBlockParameter.valueOf("latest"), true).send().getBlock().getHeader().getNumber()).longValue();
-        //System.out.println("blockNumber:" + blockNumber);
-
-        Transaction tx =
-                new Transaction(
-                        to,
-                        ChainUtils.getNonce(),
-                        10000000L,
-                        blockNumber + 88,
-                        ChainUtils.getVersion(),
-                        ChainUtils.getChainId(),
-                        "1000000000", "0x00");
-        byte[] bsTx = tx.serializeRawTransaction(false);
-        Sign.SignatureData signatureData = Sign.signMessage(bsTx, credentials.getEcKeyPair());
-        String raw_tx = tx.serializeUnverifiedTransaction(signatureData.get_signature(), bsTx);
-
-        AppSendTransaction appSendTransaction =
-                service.appSendRawTransaction(raw_tx).send();
-        //System.out.println(appSendTransaction.getError());
-
-        TransactionReceiptProcessor transactionReceiptProcessor = new PollingTransactionReceiptProcessor(service, TransactionManager.DEFAULT_POLLING_FREQUENCY, TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
-        TransactionReceipt txReceipt = transactionReceiptProcessor.waitForTransactionReceipt(appSendTransaction.getSendTransactionResult().getHash());
-        System.out.println("success");
-        System.out.println(txReceipt);
-        System.out.println(txReceipt.getBlockNumber());
-
-        System.out.println("------------");
-        CITAQueryBalance(credentials.getAddress());
-        CITAQueryBalance(to);
-        System.out.println("------------");
-
-        System.out.println(ChainUtils.getChainIdV1(service));
-        System.out.println(ChainUtils.getChainId());
-        System.out.println(ChainUtils.getVersion());
+//        Long blockNumber = Numeric.toBigInt(service.appGetBlockByNumber(DefaultBlockParameter.valueOf("latest"), true).send().getBlock().getHeader().getNumber()).longValue();
+//        //System.out.println("blockNumber:" + blockNumber);
+//
+//        Transaction tx =
+//                new Transaction(
+//                        to,
+//                        ChainUtils.getNonce(),
+//                        10000000L,
+//                        blockNumber + 88,
+//                        ChainUtils.getVersion(),
+//                        ChainUtils.getChainId(),
+//                        "1000000000", "0x00");
+//        byte[] bsTx = tx.serializeRawTransaction(false);
+//        Sign.SignatureData signatureData = Sign.signMessage(bsTx, credentials.getEcKeyPair());
+//        String raw_tx = tx.serializeUnverifiedTransaction(signatureData.get_signature(), bsTx);
+//
+//        AppSendTransaction appSendTransaction =
+//                service.appSendRawTransaction(raw_tx).send();
+//        //System.out.println(appSendTransaction.getError());
+//
+//        TransactionReceiptProcessor transactionReceiptProcessor = new PollingTransactionReceiptProcessor(service, TransactionManager.DEFAULT_POLLING_FREQUENCY, TransactionManager.DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
+//        TransactionReceipt txReceipt = transactionReceiptProcessor.waitForTransactionReceipt(appSendTransaction.getSendTransactionResult().getHash());
+//        System.out.println("success");
+//        System.out.println(txReceipt);
+//        System.out.println(txReceipt.getBlockNumber());
+//
+//        System.out.println("------------");
+//        CITAQueryBalance(credentials.getAddress());
+//        CITAQueryBalance(to);
+//        System.out.println("------------");
+//
+//        System.out.println(ChainUtils.getChainIdV1(service));
+//        System.out.println(ChainUtils.getChainId());
+//        System.out.println(ChainUtils.getVersion());
     }
 
     public static void CITAQueryBalance(String address) throws IOException {
