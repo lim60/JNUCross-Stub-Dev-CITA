@@ -1,4 +1,4 @@
-package jnucross.stub.cita.util;
+package com.webank.wecross.stub.cita.util;
 
 import com.citahub.cita.protobuf.ConvertStrByte;
 import com.citahub.cita.protocol.CITAj;

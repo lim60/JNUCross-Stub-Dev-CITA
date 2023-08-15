@@ -1,4 +1,4 @@
-package jnucross.stub.cita;
+package com.webank.wecross.stub.cita;
 
 import com.citahub.cita.crypto.ECKeyPair;
 import com.citahub.cita.crypto.Keys;
@@ -35,11 +35,12 @@ public class CITAAccount implements Account {
     }
 
     public CITAAccount(Map<String, Object> properties) {
-        String name = (String) properties.get("name");
-        String address = (String) properties.get("address");
-        String pubKeyStr = (String) properties.get("publicKey");
-        String priKeyStr = (String) properties.get("privateKey");
+        String name = (String) properties.get("username");
+        String address = (String) properties.get("ext0");
+        String pubKeyStr = (String) properties.get("pubKey");
+        String priKeyStr = (String) properties.get("secKey");
         String type = (String) properties.get("type");
+        logger.error("@@@!"+properties.toString());
         if (name == null || name.length() == 0) {
             logger.error("name has not given");
             return;

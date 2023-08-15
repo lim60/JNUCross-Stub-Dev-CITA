@@ -1,4 +1,4 @@
-package jnucross.stub.cita;
+package com.webank.wecross.stub.cita;
 
 import com.citahub.cita.protocol.CITAj;
 import com.citahub.cita.protocol.core.DefaultBlockParameterName;
@@ -15,10 +15,10 @@ import com.moandjiezana.toml.Toml;
 import com.webank.wecross.stub.Connection;
 import com.webank.wecross.stub.Request;
 import com.webank.wecross.stub.Response;
-import jnucross.stub.cita.constant.TransactionConstant;
-import jnucross.stub.cita.contract.ContractCall;
-import jnucross.stub.cita.util.InternalBlock;
-import jnucross.stub.cita.util.Utils;
+import com.webank.wecross.stub.cita.constant.TransactionConstant;
+import com.webank.wecross.stub.cita.contract.ContractCall;
+import com.webank.wecross.stub.cita.util.InternalBlock;
+import com.webank.wecross.stub.cita.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,12 +28,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+
 public class CITAConnection implements Connection {
 
     private static final Logger logger = LoggerFactory.getLogger(CITAConnection.class);
 
     private CITAj citAj;
 
+    private ConnectionEventHandler eventHandler = null;
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public CITAConnection(){
@@ -44,10 +48,16 @@ public class CITAConnection implements Connection {
         this.citAj = CITAj.build(new HttpService(chainUrl));
     }
 
-    public static CITAConnection build(String path){
+    public static CITAConnection build(String path) throws IOException {
         CITAConnection connection = new CITAConnection();
         Toml toml = new Toml();
-        toml = toml.read(new File(path + File.separator + "stub.toml"));
+        String confFilePath = path + "/stub.toml";//"/home/jnu-03/crosschain/wecross-demo/routers-payment/127.0.0.1-8250-25500/conf/chains/cita/stub.toml";
+        //logger.error(confFilePath);
+        //File confFile = new File(confFilePath);
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource resource = resolver.getResource(confFilePath);
+        toml =toml.read(resource.getInputStream());
+        //toml = toml.read(confFile);
         Map<String, Object> stubConfig = toml.toMap();
 
         Map<String, Object> channelServiceConfigValue =
@@ -55,7 +65,7 @@ public class CITAConnection implements Connection {
 
         String url = ((ArrayList<String>)channelServiceConfigValue.get("connectionsStr")).get(0);
         connection.citAj = CITAj.build(new HttpService(url));
-        return null;
+        return connection;
     }
 
 
@@ -282,11 +292,13 @@ public class CITAConnection implements Connection {
 
     @Override
     public void setConnectionEventHandler(ConnectionEventHandler eventHandler) {
-
+        this.eventHandler = eventHandler;
     }
 
     @Override
     public Map<String, String> getProperties() {
+        logger.error("@@@getProperties was called but returns nothing!");
+
         return null;
     }
 

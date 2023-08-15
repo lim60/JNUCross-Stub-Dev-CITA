@@ -1,4 +1,4 @@
-package jnucross.stub.cita.contract;
+package com.webank.wecross.stub.cita.contract;
 
 public class AbiFunctionType {
     private String name;

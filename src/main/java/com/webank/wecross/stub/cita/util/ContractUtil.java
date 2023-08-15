@@ -1,11 +1,11 @@
-package jnucross.stub.cita.util;
+package com.webank.wecross.stub.cita.util;
 
 import com.citahub.cita.abi.TypeReference;
 import com.citahub.cita.abi.datatypes.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import jnucross.stub.cita.constant.ContractType;
-import jnucross.stub.cita.contract.ContractParam;
+import com.webank.wecross.stub.cita.constant.ContractType;
+import com.webank.wecross.stub.cita.contract.ContractParam;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
