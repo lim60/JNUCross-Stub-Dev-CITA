@@ -1,4 +1,4 @@
-package jnucross.stub.cita.util;
+package com.webank.wecross.stub.cita.util;
 
 import org.bouncycastle.jcajce.provider.digest.Keccak;
 import org.bouncycastle.jcajce.provider.digest.SM3;

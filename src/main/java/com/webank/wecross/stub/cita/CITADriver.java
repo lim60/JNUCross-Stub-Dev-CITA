@@ -1,4 +1,4 @@
-package jnucross.stub.cita;
+package com.webank.wecross.stub.cita;
 
 import com.citahub.cita.abi.FunctionEncoder;
 import com.citahub.cita.abi.datatypes.Function;
@@ -13,9 +13,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webank.wecross.stub.*;
-import jnucross.stub.cita.constant.TransactionConstant;
-import jnucross.stub.cita.contract.ContractCall;
-import jnucross.stub.cita.util.*;
+import com.webank.wecross.stub.cita.constant.TransactionConstant;
+import com.webank.wecross.stub.cita.contract.ContractCall;
+import com.webank.wecross.stub.cita.util.*;
 import link.luyu.toolkit.abi.ContractABI;
 import link.luyu.toolkit.abi.FunctionABI;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -34,6 +34,7 @@ import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -50,6 +51,7 @@ public class CITADriver implements Driver {
 
     @Override
     public ImmutablePair<Boolean, TransactionRequest> decodeTransactionRequest(Request request) {
+
         int requestType = request.getType();
         logger.error("Trace - decodeTransactionRequest called!");
         return null;
@@ -57,7 +59,20 @@ public class CITADriver implements Driver {
 
     @Override
     public List<ResourceInfo> getResources(Connection connection) {
-        return null;
+        logger.error("@@@getResources was called but returns empty!");
+        //A dumb Recource list:
+        List<ResourceInfo> ResourceInfoList = new ArrayList<>();
+        ResourceInfo resourceInfo = new ResourceInfo();
+        resourceInfo.setName("Nonsense CITA Resource");
+        resourceInfo.setStubType("CITAStub");
+        resourceInfo.setProperties(null);
+        resourceInfo.setChecksum(null);
+
+        ResourceInfoList.add(resourceInfo);
+
+        return ResourceInfoList;
+        //return new ArrayList<>();
+        /*return null;*/
     }
 
     @Override

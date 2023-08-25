@@ -1,6 +1,7 @@
-package jnucross.stub.cita;
+package com.webank.wecross.stub.cita;
 
 import com.citahub.cita.crypto.*;
+import com.citahub.cita.protocol.core.CITA;
 import com.webank.wecross.stub.*;
 import org.apache.commons.io.FileUtils;
 import org.bouncycastle.util.io.pem.PemObject;
@@ -43,16 +44,22 @@ public class CITAStubFactory implements StubFactory {
 
     @Override
     public Connection newConnection(String path) {
-        Connection connection = CITAConnection.build(path);
+        Connection connection =new CITAConnection();
+        try {
+            connection = CITAConnection.build(path);
 
+        } catch (Exception e){
+            logger.error("CITA failed to build new connection"+e);
+        }
+        return connection;
         //TODO 需要测试connection的有效性
 
-        return connection;
     }
 
     @Override
     public Account newAccount(Map<String, Object> properties) {
         Account account = new CITAAccount(properties);
+        logger.error("@@@Am I here?");
         return account;
     }
 
@@ -70,7 +77,7 @@ public class CITAStubFactory implements StubFactory {
         String fileName = null;
         try {
             fileName = WalletUtils.generateWalletFile(
-                    args[0], ecKeyPair, new File(path), true);
+                    "123456", ecKeyPair, new File(path), true);
         } catch (Exception ex) {
             logger.error("generate WalletFile exception :" + ex.getMessage());
             return;
@@ -80,13 +87,17 @@ public class CITAStubFactory implements StubFactory {
 
         String accountTemplate =
                 "[account]\n"
-                        + "    type='CITA"
+                        + "    type='CITAStub"
                         + "'\n"
                         + "    accountFile='"
                         + fileName
                         + "'\n"
-                        + "    password='"+ args[0] +"' # password is required";
-        String confFilePath = path + "/account.toml";
+                        + "    password='"+ "123456" +"' # password is required"
+                        + "\n"
+                        + "    privateKey='0x"+ecKeyPair.getPrivateKey().toString(16)
+                        + "'\n"
+                        + "    publicKey='0x"+ecKeyPair.getPublicKey().toString(16)+"'";
+        String confFilePath = path + "/account.toml";//"/home/jnu-03/crosschain/wecross-demo/routers-payment/127.0.0.1-8250-25500/conf/accounts/cita/account.toml";/*path + "/account.toml";*/
         File confFile = new File(confFilePath);
         FileWriter fileWriter = null;
         try {
@@ -116,13 +127,13 @@ public class CITAStubFactory implements StubFactory {
                             + "    name = '"
                             + chainName
                             + "'\n"
-                            + "    type = 'CITA"
+                            + "    type = 'CITAStub'"
                             + "\n"
                             + "[channelService]\n"
-                            + "    walletFile = 'xxx.json'\n"
+                            + "    wallFile = 'xxx.json'\n"
                             + "    connectionsStr = ['http://10.154.24.5:1337']\n"
                             + "\n";
-            String confFilePath = path + "/stub.toml";
+            String confFilePath = path + "/stub.toml";//"/home/jnu-03/crosschain/wecross-demo/routers-payment/127.0.0.1-8250-25500/conf/chains/cita/stub.toml";/*path + "/stub.toml";*/
             File confFile = new File(confFilePath);
             if (!confFile.createNewFile()) {
                 logger.error("Conf file exists! {}", confFile);

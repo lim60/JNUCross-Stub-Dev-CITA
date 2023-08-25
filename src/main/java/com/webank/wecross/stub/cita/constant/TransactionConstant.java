@@ -1,4 +1,4 @@
-package jnucross.stub.cita.constant;
+package com.webank.wecross.stub.cita.constant;
 
 public interface TransactionConstant {
 

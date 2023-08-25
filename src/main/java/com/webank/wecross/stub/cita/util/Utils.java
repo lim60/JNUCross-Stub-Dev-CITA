@@ -1,4 +1,4 @@
-package jnucross.stub.cita.util;
+package com.webank.wecross.stub.cita.util;
 
 import com.citahub.cita.abi.datatypes.Function;
 import com.citahub.cita.protocol.core.methods.response.AppBlock;
@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.webank.wecross.stub.Block;
 import com.webank.wecross.stub.BlockHeader;
-import jnucross.stub.cita.contract.Abi;
-import jnucross.stub.cita.contract.AbiFunctionType;
-import jnucross.stub.cita.contract.ContractParam;
+import com.webank.wecross.stub.cita.contract.Abi;
+import com.webank.wecross.stub.cita.contract.AbiFunctionType;
+import com.webank.wecross.stub.cita.contract.ContractParam;
 
 import java.io.*;
 import java.nio.ByteBuffer;
