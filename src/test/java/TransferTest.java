@@ -16,9 +16,7 @@ import com.citahub.cita.tx.TransactionManager;
 import com.citahub.cita.tx.response.PollingTransactionReceiptProcessor;
 import com.citahub.cita.tx.response.TransactionReceiptProcessor;
 import com.citahub.cita.utils.Numeric;
-import jnucross.stub.cita.CITAAccount;
-import jnucross.stub.cita.util.ChainUtils;
-import jnucross.stub.cita.util.Utils;
+import com.webank.wecross.stub.cita.util.ChainUtils;
 import org.junit.Test;
 
 import java.io.File;
