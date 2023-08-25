@@ -29,7 +29,6 @@ public class CITAConnectTest {
         System.out.println("cita blockNumber = " + blockNumber);
 
         AppTransaction appTransaction = service.appGetTransactionByHash("0xb8659e978eef009a286c8d2fc663327d7c699048230ba7abd1f50f6b4d34e9b9").send();
-
         AppBlock appBlock = service.appGetBlockByNumber(DefaultBlockParameter.valueOf(appTransaction.getTransaction().getBlockNumber()), true).send();
         System.out.println(appBlock.getBlock().getBody().getTransactions());
 
